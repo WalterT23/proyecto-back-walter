@@ -1,0 +1,6 @@
+<urls>
+    <url>
+        <nombre>/admin/**</nombre>
+        <permiso>ROLE_ADMIN</permiso>
+    </url>
+</urls>
