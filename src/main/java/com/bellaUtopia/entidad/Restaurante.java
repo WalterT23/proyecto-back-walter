@@ -16,8 +16,8 @@ import com.bellaUtopia.util.EntityBase;
 public class Restaurante extends EntityBase implements Serializable{
 
 	private static final long serialVersionUID = -5758895232658125275L;
-	@SequenceGenerator(name = "RESTAURANTE_ID_RESTAURANTE_SEQ", allocationSize=1, initialValue=1, sequenceName = "restaurante_id_restaurante_seq_1")
-	@GeneratedValue(generator = "RESTAURANTE_ID_RESTAURANTE_SEQ", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "restaurante_id_seq", allocationSize=1, initialValue=1, sequenceName = "restaurante_id_seq")
+	@GeneratedValue(generator = "restaurante_id_seq", strategy=GenerationType.SEQUENCE)
 
 
 	@Id

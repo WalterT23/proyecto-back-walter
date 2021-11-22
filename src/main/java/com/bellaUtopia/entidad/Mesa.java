@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class Mesa extends EntityBase implements Serializable{
 
 	private static final long serialVersionUID = -5758895232658125275L;
-	@SequenceGenerator(name = "MESA_ID_MESA_SEQ", allocationSize=1, initialValue=1, sequenceName = "mesa_id_mesa_seq_1")
-	@GeneratedValue(generator = "MESA_ID_MESA_SEQ", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "mesas_id_seq", allocationSize=1, initialValue=1, sequenceName = "mesas_id_seq")
+	@GeneratedValue(generator = "mesas_id_seq", strategy=GenerationType.SEQUENCE)
 
 
 	@Id
@@ -20,13 +20,13 @@ public class Mesa extends EntityBase implements Serializable{
 	private Integer id;
 
 	@Column(name = "nro_piso")
-	private String nroPiso;
+	private Integer nroPiso;
 
 	@Column(name = "nombre_mesa")
 	private String nombre;
 
 	@Column(name = "id_restaurante")
-	private String idRestaurante;
+	private Integer idRestaurante;
 
 	@Column(name = "posicion")
 	private String posicion;
@@ -38,10 +38,10 @@ public class Mesa extends EntityBase implements Serializable{
 	public void setId(Integer id){
 		this.id = id;
 	}
-	public String getNroPiso(){
+	public Integer getNroPiso(){
 		return nroPiso;
 	}
-	public void setNroPiso(String nroPiso){
+	public void setNroPiso(Integer nroPiso){
 		this.nroPiso = nroPiso;
 	}
 	public String getNombre(){
@@ -50,10 +50,10 @@ public class Mesa extends EntityBase implements Serializable{
 	public void setNombre(String nombre){
 		this.nombre = nombre;
 	}
-	public String getIdRestaurante(){
+	public Integer getIdRestaurante(){
 		return idRestaurante;
 	}
-	public void setIdRestaurante(String idRestaurante){
+	public void setIdRestaurante(Integer idRestaurante){
 		this.idRestaurante = idRestaurante;
 	}
 	public String getPosicion(){

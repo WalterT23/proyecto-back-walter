@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class Cliente extends EntityBase implements Serializable{
 
 	private static final long serialVersionUID = -5758895232658125275L;
-	@SequenceGenerator(name = "CLIENTE_ID_CLIENTE_SEQ", allocationSize=1, initialValue=1, sequenceName = "cliente_id_cliente_seq_1")
-	@GeneratedValue(generator = "CLIENTE_ID_CLIENTE_SEQ", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "cliente_id_seq", allocationSize=1, initialValue=1, sequenceName = "cliente_id_seq")
+	@GeneratedValue(generator = "cliente_id_seq", strategy=GenerationType.SEQUENCE)
 
 
 	@Id
