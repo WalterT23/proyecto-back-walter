@@ -66,4 +66,21 @@ public class MesaResource extends ResourceBase<Mesa, ServiceBase<Mesa, DaoBase<M
 
         return Response.ok(response).build();
 	}
+	
+	@GET
+	@Path("mesas-reservadas")
+	public Response listadoMesasReservadas( 
+			@QueryParam("idRestaurante") Integer idRestaurante,
+			@QueryParam("fecha") String fecha,
+			@QueryParam("horarios") String horarios){
+
+        List<Map<String, Object>> lista = null;
+        HashMap<String, Object> response = new HashMap<String, Object>();
+        lista = vistaProyectoService.listadoMesasReservadas(idRestaurante, fecha, horarios);
+
+        response.put("lista", lista);
+        response.put("totalDatos", lista.size());
+
+        return Response.ok(response).build();
+	}
 }
