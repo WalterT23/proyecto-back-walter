@@ -57,8 +57,8 @@ public class ReservaResource extends ResourceBase<Reserva, ServiceBase<Reserva, 
 	
 	@POST
 	@Path("/listar-reserva")
-	public Response realizarReserva(Cliente cliente){
-		return Response.ok( vistaProyectoService.listarReserva(cliente)).build();
+	public Response listarReserva(ReservaParam reservaParam){
+		return Response.ok( vistaProyectoService.listarReserva(reservaParam)).build();
 	}
 	
 	@DELETE

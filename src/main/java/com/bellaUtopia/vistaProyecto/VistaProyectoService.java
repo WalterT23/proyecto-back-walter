@@ -1,5 +1,6 @@
 package com.bellaUtopia.vistaProyecto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import com.bellaUtopia.entidad.Cliente;
 import com.bellaUtopia.excepciones.ApplicationException;
+import com.bellaUtopia.param.ReservaParam;
 
 public class VistaProyectoService {
 
@@ -58,10 +60,11 @@ public class VistaProyectoService {
 	
 
 
-	public  List<Map<String, Object>> listarReserva(Cliente cliente) throws ApplicationException{
-		try{				
+	public  List<Map<String, Object>> listarReserva(ReservaParam reservaParam) throws ApplicationException{
+		try{	
+				Cliente cliente = reservaParam.getCliente();
 				List<Object[]> postComments = null;		
-				Boolean where = false;
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
 				
 				String query = " select r.id as idReserva, r.fecha, r.cantidad as cantidadPersonas, h.inicio_horario, h.fin_horario,\r\n" + 
 						"c.cedula, c.nombre, c.apellido, rest.nombre as nombreRestaurante, m.nro_piso, m.nombre_mesa, m.posicion\r\n" + 
@@ -71,16 +74,9 @@ public class VistaProyectoService {
 						"join cliente c ON (c.id = r.id_cliente)\r\n" + 
 						"join restaurante rest ON (rest.id = r.id_restaurante)\r\n" + 
 						"join mesas m ON (m.id = r.id_mesa) ";
-				if(cliente.getId() != null) {
-					where = true;
-					query += " WHERE c.id = "+cliente.getId().toString();
-				}
-				if(cliente.getCedula() != null) {
-					if(!where) {
-						query += " WHERE c.cedula = '"+cliente.getCedula()+"'";
-					}
-					query += " OR c.cedula = '"+cliente.getCedula()+"'";
-				}
+				query += " WHERE rest.id = "+reservaParam.getRestaurante().getId().toString();
+				query += " AND r.fecha = '"+formatter.format(reservaParam.getFechaReserva())+"'";
+				query += " AND c.cedula = '"+cliente.getCedula()+"'";
 
 
 		        postComments = em.createNativeQuery(query.toString()).
