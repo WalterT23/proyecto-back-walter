@@ -12,8 +12,8 @@ import java.util.Date;
 public class Reserva extends EntityBase implements Serializable{
 
 	private static final long serialVersionUID = -5758895232658125275L;
-	@SequenceGenerator(name = "RESERVA_ID_RESERVA_SEQ", allocationSize=1, initialValue=1, sequenceName = "reserva_detalle_id_seq")
-	@GeneratedValue(generator = "RESERVA_ID_RESERVA_SEQ", strategy=GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "reserva_id_seq", allocationSize=1, initialValue=1, sequenceName = "reserva_id_seq")
+	@GeneratedValue(generator = "reserva_id_seq", strategy=GenerationType.SEQUENCE)
 
 
 	@Id

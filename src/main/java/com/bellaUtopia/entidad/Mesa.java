@@ -31,6 +31,9 @@ public class Mesa extends EntityBase implements Serializable{
 	@Column(name = "posicion")
 	private String posicion;
 
+	@Column(name = "capacidad")
+	private Integer capacidad;
+
 
 	public Integer getId(){
 		return id;
@@ -62,4 +65,6 @@ public class Mesa extends EntityBase implements Serializable{
 	public void setPosicion(String posicion){
 		this.posicion = posicion;
 	}
+	public Integer getCapacidad() { return capacidad;}
+	public void setCapacidad(Integer capacidad) { this.capacidad = capacidad; }
 }
