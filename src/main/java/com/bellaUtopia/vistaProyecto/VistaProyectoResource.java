@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 @Path("/rest/vista-proyecto")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class VistaProyectoResource {
+public class    VistaProyectoResource {
 
     @Inject
     private VistaProyectoService servicio;

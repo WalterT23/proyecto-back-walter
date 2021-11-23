@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
-  <context-root>/bella-utopia</context-root>
+  <context-root>/rekutu</context-root>
 </jboss-web>

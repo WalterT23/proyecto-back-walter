@@ -45,7 +45,7 @@ public class ReservaService extends ServiceBase<Reserva, DaoBase<Reserva>> {
 		Reserva reserva = new Reserva();
 		
 		reserva.setCantidad(reservaParam.getCantidad());
-		reserva.setFecha(new Date());
+		reserva.setFecha(reservaParam.getFechaReserva());
 		reserva.setIdCliente(cliente.getId());
 		reserva.setIdMesa(reservaParam.getMesa().getId());
 		reserva.setIdRestaurante(reservaParam.getRestaurante().getId());
@@ -55,7 +55,7 @@ public class ReservaService extends ServiceBase<Reserva, DaoBase<Reserva>> {
 		
 		for(Horario data : reservaParam.getListaHorarios()){
 			ReservaDetalle detalle = new ReservaDetalle();
-			detalle.setFecha(new Date());
+			detalle.setFecha(reservaParam.getFechaReserva());
 			detalle.setIdHorario(data.getId());
 			detalle.setIdReserva(reserva.getId());
 			reservaDetalleService.insertar(detalle);

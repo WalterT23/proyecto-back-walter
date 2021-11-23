@@ -19,6 +19,42 @@ public class VistaProyectoService {
 	private String query = "";
 	private Boolean first = true;
 
+	public List<Map<String, Object>> listadoMesas() throws ApplicationException {
+		try {
+			List<Object[]> postComments = null;
+			String query = "   select m2.nro_piso nroPiso, m2.nombre_mesa nombreMesa, m2.posicion, m2.capacidad,\n" +
+					"   case when r.id != null then 'NO' else 'SI' end disponible,\n" +
+					"   h2.inicio_horario inicio, h2.fin_horario fin " +
+					"   from mesas m2\n" +
+					"   join restaurante r2 on m2.id_restaurante = r2.id\n" +
+					"   left join reserva r on r2.id = r.id_restaurante and r.fecha = '2021-11-23' \n" +
+					"   left join reserva_detalle rd on r.id = rd.id_reserva \n" +
+					"   left join horario h2 on rd.id_horario = h2.id " ;
+			query += "where r2.id ";
+
+			postComments = em.createNativeQuery(query.toString()).
+					getResultList();
+
+			List<Map<String, Object>> resultlist = new ArrayList<>();
+			for (Object[] oResultArray : postComments) {
+				Map<String, Object> oMapResult = new HashMap<>();
+				oMapResult.put("nroPiso", oResultArray[0]);
+				oMapResult.put("nombreMesa", oResultArray[1]);
+				oMapResult.put("posicion", oResultArray[2]);
+				oMapResult.put("capacidad", oResultArray[3]);
+				oMapResult.put("disponible", oResultArray[4]);
+				oMapResult.put("inicio", oResultArray[5]);
+				oMapResult.put("fin", oResultArray[6]);
+
+				resultlist.add(oMapResult);
+			}
+			return resultlist;
+
+		} catch (Exception e) {
+			throw new ApplicationException(e);
+		}
+	}
+
 	
 
 
