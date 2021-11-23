@@ -56,6 +56,40 @@ public class VistaProyectoService {
 			throw new ApplicationException(e);
 		}
 	}
+	
+	public List<Map<String, Object>> listadoMesasReservadas(Integer idRestaurante, String fecha, String horarios) throws ApplicationException {
+		try {
+			List<Object[]> postComments = null;
+			String query =  
+					"	select distinct m.* from mesas m\r\n" + 
+					"	left join reserva r ON r.id_mesa = m.id\r\n" + 
+					"	left join reserva_detalle rd ON rd.id_reserva = r.id \r\n" + 
+					"	where \r\n" + 
+					"	r.id_restaurante = " + idRestaurante.toString()+" \r\n" + 
+					"	AND r.fecha = '"+fecha+"'\r\n" + 
+					"	AND rd.id_horario IN ("+horarios+")\r\n"  ;
+
+			postComments = em.createNativeQuery(query.toString()).
+					getResultList();
+
+			List<Map<String, Object>> resultlist = new ArrayList<>();
+			for (Object[] oResultArray : postComments) {
+				Map<String, Object> oMapResult = new HashMap<>();
+				oMapResult.put("nroPiso", oResultArray[0]);
+				oMapResult.put("id", oResultArray[1]);
+				oMapResult.put("nombre_mesa", oResultArray[2]);
+				oMapResult.put("id_restaurante", oResultArray[3]);
+				oMapResult.put("posicion", oResultArray[4]);
+				oMapResult.put("capacidad", oResultArray[5]);
+
+				resultlist.add(oMapResult);
+			}
+			return resultlist;
+
+		} catch (Exception e) {
+			throw new ApplicationException(e);
+		}
+	}
 
 	
 
