@@ -1,6 +1,6 @@
 package com.bellaUtopia.servicio;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,14 +32,16 @@ public class ReservaService extends ServiceBase<Reserva, DaoBase<Reserva>> {
 	}
 	
 	public ReservaParam realizarReserva(ReservaParam reservaParam) {
-		Cliente cliente = reservaParam.getCliente();
-		if(cliente.getId() == null) {
+		
+		
+		Cliente cliente = new Cliente();
+		cliente.setCedula(reservaParam.getCliente().getCedula());
+		List<Cliente> listClientes = clienteService.listarFiltrado(cliente);
+		
+		if(listClientes.size() == 0) {
 			clienteService.insertar(reservaParam.getCliente());
 		}else {
-			cliente = clienteService.obtenerEntidad(reservaParam.getCliente().getId(), Cliente.class);
-			if(cliente.getId() == null) {
-				clienteService.insertar(reservaParam.getCliente());
-			}
+			cliente = listClientes.get(0);
 		}
 		
 		Reserva reserva = new Reserva();
@@ -62,6 +64,25 @@ public class ReservaService extends ServiceBase<Reserva, DaoBase<Reserva>> {
 		}
 		
 		return reservaParam;
+		
+	}
+	
+
+	public void eliminarReserva(Integer id) {
+		
+		Reserva reserva = dao.obtenerEntidad(id, Reserva.class);
+
+		ReservaDetalle detalle = new ReservaDetalle();
+		detalle.setIdReserva(id);
+		List<ReservaDetalle> listReservaDetalle = reservaDetalleService.listarFiltrado(detalle);
+		
+		dao.insert(reserva);
+		
+		for(ReservaDetalle data : listReservaDetalle){
+			reservaDetalleService.eliminar( data.getId(), new ReservaDetalle());
+		}
+		
+		dao.eliminar(id, new Reserva());
 		
 	}
 }
