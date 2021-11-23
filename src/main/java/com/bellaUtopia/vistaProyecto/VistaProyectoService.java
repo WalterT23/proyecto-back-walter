@@ -1,5 +1,6 @@
 package com.bellaUtopia.vistaProyecto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import com.bellaUtopia.entidad.Cliente;
 import com.bellaUtopia.excepciones.ApplicationException;
+import com.bellaUtopia.param.ReservaParam;
 
 public class VistaProyectoService {
 
@@ -19,18 +21,19 @@ public class VistaProyectoService {
 	private String query = "";
 	private Boolean first = true;
 
-	public List<Map<String, Object>> listadoMesas() throws ApplicationException {
+	public List<Map<String, Object>> listadoMesas(Integer idRestaurante, String fecha, String horarios) throws ApplicationException {
 		try {
 			List<Object[]> postComments = null;
-			String query = "   select m2.nro_piso nroPiso, m2.nombre_mesa nombreMesa, m2.posicion, m2.capacidad,\n" +
-					"   case when r.id != null then 'NO' else 'SI' end disponible,\n" +
-					"   h2.inicio_horario inicio, h2.fin_horario fin " +
-					"   from mesas m2\n" +
-					"   join restaurante r2 on m2.id_restaurante = r2.id\n" +
-					"   left join reserva r on r2.id = r.id_restaurante and r.fecha = '2021-11-23' \n" +
-					"   left join reserva_detalle rd on r.id = rd.id_reserva \n" +
-					"   left join horario h2 on rd.id_horario = h2.id " ;
-			query += "where r2.id ";
+			String query = "   SELECT * from mesas \r\n" + 
+					"WHERE id NOT IN (\r\n" + 
+					"	select distinct m.id from mesas m\r\n" + 
+					"	left join reserva r ON r.id_mesa = m.id\r\n" + 
+					"	left join reserva_detalle rd ON rd.id_reserva = r.id \r\n" + 
+					"	where \r\n" + 
+					"	r.id_restaurante = " + idRestaurante.toString()+" \r\n" + 
+					"	AND r.fecha = '"+fecha+"'\r\n" + 
+					"	AND rd.id_horario IN ("+horarios+")\r\n" + 
+					") AND id_restaurante = " + idRestaurante  ;
 
 			postComments = em.createNativeQuery(query.toString()).
 					getResultList();
@@ -39,12 +42,11 @@ public class VistaProyectoService {
 			for (Object[] oResultArray : postComments) {
 				Map<String, Object> oMapResult = new HashMap<>();
 				oMapResult.put("nroPiso", oResultArray[0]);
-				oMapResult.put("nombreMesa", oResultArray[1]);
-				oMapResult.put("posicion", oResultArray[2]);
-				oMapResult.put("capacidad", oResultArray[3]);
-				oMapResult.put("disponible", oResultArray[4]);
-				oMapResult.put("inicio", oResultArray[5]);
-				oMapResult.put("fin", oResultArray[6]);
+				oMapResult.put("id", oResultArray[1]);
+				oMapResult.put("nombre_mesa", oResultArray[2]);
+				oMapResult.put("id_restaurante", oResultArray[3]);
+				oMapResult.put("posicion", oResultArray[4]);
+				oMapResult.put("capacidad", oResultArray[5]);
 
 				resultlist.add(oMapResult);
 			}
@@ -58,9 +60,11 @@ public class VistaProyectoService {
 	
 
 
-	public  List<Map<String, Object>> listarReserva(Cliente cliente) throws ApplicationException{
-		try{				
+	public  List<Map<String, Object>> listarReserva(ReservaParam reservaParam) throws ApplicationException{
+		try{	
+				Cliente cliente = reservaParam.getCliente();
 				List<Object[]> postComments = null;		
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
 				
 				String query = " select r.id as idReserva, r.fecha, r.cantidad as cantidadPersonas, h.inicio_horario, h.fin_horario,\r\n" + 
 						"c.cedula, c.nombre, c.apellido, rest.nombre as nombreRestaurante, m.nro_piso, m.nombre_mesa, m.posicion\r\n" + 
@@ -70,8 +74,9 @@ public class VistaProyectoService {
 						"join cliente c ON (c.id = r.id_cliente)\r\n" + 
 						"join restaurante rest ON (rest.id = r.id_restaurante)\r\n" + 
 						"join mesas m ON (m.id = r.id_mesa) ";
-				
-				query += " WHERE c.id = "+cliente.getId().toString()+ " OR c.cedula = '"+cliente.getCedula()+"'";
+				query += " WHERE rest.id = "+reservaParam.getRestaurante().getId().toString();
+				query += " AND r.fecha = '"+formatter.format(reservaParam.getFechaReserva())+"'";
+				query += " AND c.cedula = '"+cliente.getCedula()+"'";
 
 
 		        postComments = em.createNativeQuery(query.toString()).
