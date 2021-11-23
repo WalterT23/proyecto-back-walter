@@ -12,7 +12,7 @@ import java.util.Date;
 public class Reserva extends EntityBase implements Serializable{
 
 	private static final long serialVersionUID = -5758895232658125275L;
-	@SequenceGenerator(name = "RESERVA_ID_RESERVA_SEQ", allocationSize=1, initialValue=1, sequenceName = "reserva_id_reserva_seq_1")
+	@SequenceGenerator(name = "RESERVA_ID_RESERVA_SEQ", allocationSize=1, initialValue=1, sequenceName = "reserva_detalle_id_seq")
 	@GeneratedValue(generator = "RESERVA_ID_RESERVA_SEQ", strategy=GenerationType.SEQUENCE)
 
 
@@ -27,6 +27,7 @@ public class Reserva extends EntityBase implements Serializable{
 	private Integer idMesa;
 
 	@Column(name = "fecha")
+    @Temporal(TemporalType.DATE)
 	private Date fecha;
 
 	@Column(name = "rango_hora")
