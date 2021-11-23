@@ -74,9 +74,19 @@ public class VistaProyectoService {
 						"join cliente c ON (c.id = r.id_cliente)\r\n" + 
 						"join restaurante rest ON (rest.id = r.id_restaurante)\r\n" + 
 						"join mesas m ON (m.id = r.id_mesa) ";
+				
+				if(reservaParam.getRestaurante() == null) {
+					throw new ApplicationException("Debe ingresar el código del restaurante");
+				}
 				query += " WHERE rest.id = "+reservaParam.getRestaurante().getId().toString();
+				if(reservaParam.getFechaReserva() == null) {
+					throw new ApplicationException("Debe ingresar la fecha de la reserva");
+				}
+				
 				query += " AND r.fecha = '"+formatter.format(reservaParam.getFechaReserva())+"'";
-				query += " AND c.cedula = '"+cliente.getCedula()+"'";
+				if(cliente != null && cliente.getCedula() != null) {
+					query += " AND c.cedula = '"+cliente.getCedula()+"'";					
+				}
 
 
 		        postComments = em.createNativeQuery(query.toString()).
